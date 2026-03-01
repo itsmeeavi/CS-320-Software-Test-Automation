@@ -1,0 +1,138 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+public class ContactServiceTest {
+
+    // ---------- Add Contact ----------
+
+    @Test
+    public void testAddContactSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("001", "John", "Doe", "1234567890", "123 Main Street");
+
+        service.addContact(contact);
+
+        // If no exception and object still correct, test passes
+        assertEquals("John", contact.getFirstName());
+    }
+
+    @Test
+    public void testAddContactFailsWhenNull() {
+        ContactService service = new ContactService();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.addContact(null);
+        });
+    }
+
+    @Test
+    public void testAddDuplicateContactIdFails() {
+        ContactService service = new ContactService();
+        Contact contact1 = new Contact("001", "John", "Doe", "1234567890", "123 Main Street");
+        Contact contact2 = new Contact("001", "Jane", "Smith", "0987654321", "456 Side Street");
+
+        service.addContact(contact1);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.addContact(contact2);
+        });
+    }
+
+    // ---------- Delete Contact ----------
+
+    @Test
+    public void testDeleteContactSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("002", "Mike", "Lee", "1112223333", "789 Hill Road");
+
+        service.addContact(contact);
+        service.deleteContact("002");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.deleteContact("002"); // should not exist anymore
+        });
+    }
+
+    @Test
+    public void testDeleteContactNotFoundFails() {
+        ContactService service = new ContactService();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.deleteContact("999");
+        });
+    }
+
+    // ---------- Update First Name ----------
+
+    @Test
+    public void testUpdateFirstNameSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("003", "Anna", "Kim", "2223334444", "321 Lake View");
+
+        service.addContact(contact);
+        service.updateFirstName("003", "Sara");
+
+        assertEquals("Sara", contact.getFirstName());
+    }
+
+    @Test
+    public void testUpdateFirstNameContactNotFoundFails() {
+        ContactService service = new ContactService();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.updateFirstName("999", "Sara");
+        });
+    }
+
+    // ---------- Update Last Name ----------
+
+    @Test
+    public void testUpdateLastNameSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("004", "Tom", "Hardy", "3334445555", "654 River Road");
+
+        service.addContact(contact);
+        service.updateLastName("004", "Stone");
+
+        assertEquals("Stone", contact.getLastName());
+    }
+
+    // ---------- Update Phone ----------
+
+    @Test
+    public void testUpdatePhoneSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("005", "Leo", "King", "4445556666", "987 Forest Lane");
+
+        service.addContact(contact);
+        service.updatePhone("005", "9998887777");
+
+        assertEquals("9998887777", contact.getPhone());
+    }
+
+    @Test
+    public void testUpdatePhoneInvalidFails() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("005", "Leo", "King", "4445556666", "987 Forest Lane");
+
+        service.addContact(contact);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.updatePhone("005", "123"); // invalid phone
+        });
+    }
+
+    // ---------- Update Address ----------
+
+    @Test
+    public void testUpdateAddressSuccess() {
+        ContactService service = new ContactService();
+        Contact contact = new Contact("006", "Nina", "Ray", "5556667777", "Old Address");
+
+        service.addContact(contact);
+        service.updateAddress("006", "New Address Street");
+
+        assertEquals("New Address Street", contact.getAddress());
+    }
+}

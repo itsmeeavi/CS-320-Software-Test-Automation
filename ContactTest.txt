@@ -1,0 +1,172 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+public class ContactTest {
+
+    // ---------- Constructor (valid) ----------
+
+    @Test
+    public void testCreateContactSuccess() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+
+        assertEquals("12345", contact.getContactId());
+        assertEquals("John", contact.getFirstName());
+        assertEquals("Doe", contact.getLastName());
+        assertEquals("1234567890", contact.getPhone());
+        assertEquals("123 Main Street", contact.getAddress());
+    }
+
+    // ---------- Constructor (invalid) ----------
+
+    @Test
+    public void testCreateContactFailsWhenContactIdNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact(null, "John", "Doe", "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenContactIdTooLong() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345678901", "John", "Doe", "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenFirstNameNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", null, "Doe", "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenFirstNameTooLong() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "VeryLongNameHere", "Doe", "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenLastNameNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", null, "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenLastNameTooLong() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "VeryLongLastName", "1234567890", "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenPhoneNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "Doe", null, "123 Main Street"));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenPhoneTooShort() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "Doe", "123456789", "123 Main Street")); // 9 digits
+    }
+
+    @Test
+    public void testCreateContactFailsWhenPhoneTooLong() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "Doe", "12345678901", "123 Main Street")); // 11 digits
+    }
+
+    @Test
+    public void testCreateContactFailsWhenAddressNull() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "Doe", "1234567890", null));
+    }
+
+    @Test
+    public void testCreateContactFailsWhenAddressTooLong() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Contact("12345", "John", "Doe", "1234567890",
+                        "This address is definitely more than thirty characters long"));
+    }
+
+    // ---------- Setters (valid) ----------
+
+    @Test
+    public void testSetFirstNameSuccess() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        contact.setFirstName("Mike");
+        assertEquals("Mike", contact.getFirstName());
+    }
+
+    @Test
+    public void testSetLastNameSuccess() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        contact.setLastName("Smith");
+        assertEquals("Smith", contact.getLastName());
+    }
+
+    @Test
+    public void testSetPhoneSuccess() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        contact.setPhone("0987654321");
+        assertEquals("0987654321", contact.getPhone());
+    }
+
+    @Test
+    public void testSetAddressSuccess() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        contact.setAddress("456 New Street");
+        assertEquals("456 New Street", contact.getAddress());
+    }
+
+    // ---------- Setters (invalid) ----------
+
+    @Test
+    public void testSetFirstNameFailsWhenNull() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setFirstName(null));
+    }
+
+    @Test
+    public void testSetFirstNameFailsWhenTooLong() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setFirstName("VeryLongNameHere"));
+    }
+
+    @Test
+    public void testSetLastNameFailsWhenNull() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setLastName(null));
+    }
+
+    @Test
+    public void testSetLastNameFailsWhenTooLong() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setLastName("VeryLongLastName"));
+    }
+
+    @Test
+    public void testSetPhoneFailsWhenNull() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setPhone(null));
+    }
+
+    @Test
+    public void testSetPhoneFailsWhenWrongLength() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setPhone("123"));
+    }
+
+    @Test
+    public void testSetAddressFailsWhenNull() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () -> contact.setAddress(null));
+    }
+
+    @Test
+    public void testSetAddressFailsWhenTooLong() {
+        Contact contact = new Contact("12345", "John", "Doe", "1234567890", "123 Main Street");
+        assertThrows(IllegalArgumentException.class, () ->
+                contact.setAddress("This address is definitely more than thirty characters long"));
+    }
+
+    // ---------- ID immutability (no setter) ----------
+    // contactId is final and has no setter, so it cannot be updated (meets requirement).
+}

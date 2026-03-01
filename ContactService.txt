@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ContactService {
+
+    private final List<Contact> contactList = new ArrayList<>();
+
+    public void addContact(Contact contact) {
+        if (contact == null) {
+            throw new IllegalArgumentException("Contact cannot be null");
+        }
+
+        for (Contact c : contactList) {
+            if (c.getContactId().equals(contact.getContactId())) {
+                throw new IllegalArgumentException("Contact ID already exists");
+            }
+        }
+        contactList.add(contact);
+    }
+
+    public void deleteContact(String contactId) {
+        if (contactId == null || contactId.length() > 10) {
+            throw new IllegalArgumentException("Invalid contact ID");
+        }
+
+        Contact contactToRemove = null;
+        for (Contact c : contactList) {
+            if (c.getContactId().equals(contactId)) {
+                contactToRemove = c;
+                break;
+            }
+        }
+
+        if (contactToRemove == null) {
+            throw new IllegalArgumentException("Contact not found");
+        }
+
+        contactList.remove(contactToRemove);
+    }
+
+    public void updateFirstName(String contactId, String firstName) {
+        findContact(contactId).setFirstName(firstName);
+    }
+
+    public void updateLastName(String contactId, String lastName) {
+        findContact(contactId).setLastName(lastName);
+    }
+
+    public void updatePhone(String contactId, String phone) {
+        findContact(contactId).setPhone(phone);
+    }
+
+    public void updateAddress(String contactId, String address) {
+        findContact(contactId).setAddress(address);
+    }
+
+    private Contact findContact(String contactId) {
+        if (contactId == null || contactId.length() > 10) {
+            throw new IllegalArgumentException("Invalid contact ID");
+        }
+
+        for (Contact c : contactList) {
+            if (c.getContactId().equals(contactId)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Contact not found");
+    }
+
+    // Optional helper for unit tests (read-only)
+    public List<Contact> getAllContacts() {
+        return Collections.unmodifiableList(contactList);
+    }
+}
